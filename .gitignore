@@ -42,3 +42,20 @@ data/phase2/
 # Historical local uploads; the curated public artifact lives under submission/
 /submission*.csv
 /submissions/
+
+# SSH / private keys (never publish)
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+id_dsa
+id_dsa.*
+id_ecdsa
+id_ecdsa.*
+*.pem
+*.ppk
+*.key
+!*.key.example
+.ssh/
+**/id_rsa
+**/id_ed25519

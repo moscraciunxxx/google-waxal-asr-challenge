@@ -1,0 +1,44 @@
+# Local environments and caches
+.venv/
+.venv-*/
+.scratch/
+.cache/
+.pytest_cache/
+.ruff_cache/
+__pycache__/
+*/__pycache__/
+*.py[cod]
+.DS_Store
+
+# Downloaded models, checkpoints, audio and generated experiment state
+checkpoints/
+outputs/
+newaudios/
+data/phase2/audio/
+data/phase2/audio.zip
+data/hf_metadata/
+*.safetensors
+*.bin
+*.pt
+*.pth
+
+# Reconstructed/derived competition tables and language-model artifacts
+data/*.csv
+data/*.parquet
+data/*.json
+data/lms/
+data/lms_phase2_domain/
+data/anv_dholuo/
+data/corrected_waxal/
+data/phase2/
+!data/README.md
+
+# Personal agent/editor configuration
+.claude/
+.grok/
+.idea/
+.vscode/
+
+# Historical local uploads; the curated public artifact lives under submission/
+/submission*.csv
+/submissions/

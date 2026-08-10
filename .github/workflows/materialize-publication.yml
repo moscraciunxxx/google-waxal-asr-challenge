@@ -1,0 +1,40 @@
+name: Materialize publication tree
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.publish/**'
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reassemble and extract
+        run: |
+          set -euo pipefail
+          if [ ! -d .publish ]; then echo "no payload"; exit 0; fi
+          # Wait until all parts present (manifest)
+          if [ -f .publish/manifest.json ]; then
+            N=$(python3 -c "import json;print(json.load(open('.publish/manifest.json'))['n_parts'])")
+            HAVE=$(ls .publish/part_*.b64 2>/dev/null | wc -l | tr -d ' ')
+            echo "parts have=$HAVE need=$N"
+            if [ "$HAVE" != "$N" ]; then
+              echo "Incomplete payload; skipping materialize"
+              exit 0
+            fi
+          fi
+          cat .publish/part_*.b64 | base64 -d > /tmp/tree.tar.gz
+          tar -xzf /tmp/tree.tar.gz
+          rm -rf .publish
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git status
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+            exit 0
+          fi
+          git commit -m "Materialize full WAXAL publication tree from payload"
+          git push origin HEAD:main
